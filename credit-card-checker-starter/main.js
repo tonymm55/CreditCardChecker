@@ -24,11 +24,84 @@ const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, inval
 
 
 // Add your functions below:
+function validateCred(card) {
+    // Create a copy of the card array to avoid mutation
+    const cardCopy = [...card];
+  
+    // Step 1: Starting from the farthest digit to the right (check digit), iterate to the left.
+    for (let i = cardCopy.length - 2; i >= 0; i -= 2) {
+      // Step 2: Double every other digit (the check digit is not doubled). If greater than 9, subtract 9.
+      let doubledDigit = cardCopy[i] * 2;
+      if (doubledDigit > 9) {
+        doubledDigit -= 9;
+      }
+      cardCopy[i] = doubledDigit;
+    }
+  
+    // Step 3: Sum up all the digits in the credit card number.
+    const sum = cardCopy.reduce((acc, digit) => acc + digit);
+  
+    // Step 4: If the sum modulo 10 is 0, then the number is valid; otherwise, it's invalid.
+    return sum % 10 === 0;
+}
+  
+// Example usage:
+const validCard = [4, 5, 3, 9, 6, 7, 7, 9, 0, 8, 0, 1, 6, 8, 0, 8];
+const invalidCard = [4, 5, 3, 2, 7, 7, 8, 7, 7, 1, 0, 9, 1, 7, 9, 5];
 
+console.log(validateCred(validCard));   // Output: true
+console.log(validateCred(invalidCard)); // Output: false
 
+function findInvalidCards(cards) {
+const invalidCards = [];
 
+for (let i = 0; i < cards.length; i++) {
+    const card = cards[i];
+    if (!validateCred(card)){
+    invalidCards.push(card);
+    }
+}
 
+return invalidCards;
+}
 
-
-
-
+const invalidCards = findInvalidCards(batch);
+console.log(invalidCards);
+  
+function idInvalidCardCompanies(invalidCards) {
+    const companies = [];
+  
+    for (let i = 0; i < invalidCards.length; i++) {
+      const firstDigit = invalidCards[i][0];
+      switch (firstDigit) {
+        case 3:
+          if (!companies.includes('Amex')) {
+            companies.push('Amex');
+          }
+          break;
+        case 4:
+          if (!companies.includes('Visa')) {
+            companies.push('Visa');
+          }
+          break;
+        case 5:
+          if (!companies.includes('Mastercard')) {
+            companies.push('Mastercard');
+          }
+          break;
+        case 6:
+          if (!companies.includes('Discover')) {
+            companies.push('Discover');
+          }
+          break;
+        default:
+          console.log(`Company not found for card starting with ${firstDigit}`);
+      }
+    }
+  
+    return companies;
+}
+  
+const invalidCompanies = idInvalidCardCompanies(invalidCards);
+console.log(invalidCompanies);
+  
