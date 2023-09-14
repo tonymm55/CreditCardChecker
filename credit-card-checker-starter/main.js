@@ -39,7 +39,7 @@ function validateCred(card) {
     }
   
     // Step 3: Sum up all the digits in the credit card number.
-    const sum = cardCopy.reduce((acc, digit) => acc + digit);
+    const sum = cardCopy.reduce((acc, digit) => acc + digit, 0);
   
     // Step 4: If the sum modulo 10 is 0, then the number is valid; otherwise, it's invalid.
     return sum % 10 === 0;
